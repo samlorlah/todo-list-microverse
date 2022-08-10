@@ -1,6 +1,5 @@
 const listContainer = document.querySelector('.lists');
 const todoInput = document.querySelector('.todo-input');
-const todoInputEdit = document.querySelectorAll('.todo-input-edit');
 const addTodoBtn = document.querySelector('#todo-add-btn');
 
 export default class Todos {
@@ -79,9 +78,7 @@ export default class Todos {
   }
 
   removeTask(selectedTask) {
-    this.tasks = this.tasks.filter((task) => {
-      return selectedTask.index !== task.index;
-    });
+    this.tasks = this.tasks.filter((task) => selectedTask.index !== task.index);
     this.tasks.map((task, index) => (task.index = index + 1));
     localStorage.setItem('todoItems', JSON.stringify(this.tasks));
     this.getTasks();
@@ -92,6 +89,7 @@ export default class Todos {
       if (task.index === selectedTask.index) {
         task.description = text;
       }
+      return;
     });
     localStorage.setItem('todoItems', JSON.stringify(this.tasks));
     this.getTasks();
@@ -104,7 +102,6 @@ todos.getTasks();
 
 addTodoBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  const text = todoInput;
   const index = todos.tasks.length + 1;
   if (todoInput.value !== '') {
     const newTask = {
