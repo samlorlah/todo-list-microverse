@@ -79,7 +79,10 @@ export default class Todos {
 
   removeTask(selectedTask) {
     this.tasks = this.tasks.filter((task) => selectedTask.index !== task.index);
-    this.tasks.map((task, index) => {task.index = index + 1});
+    this.tasks.map((task, index) => {
+        task.index = index + 1;
+        return task;
+    });
     localStorage.setItem('todoItems', JSON.stringify(this.tasks));
     this.getTasks();
   }
