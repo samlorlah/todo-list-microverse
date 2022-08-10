@@ -33,7 +33,8 @@ section {
   border-bottom: 1px solid rgb(217, 216, 216);
 }
 
-.list-input input {
+.todo-input,
+.todo-input-edit {
   height: 50px;
   outline: none;
   width: 98%;
@@ -44,8 +45,20 @@ section {
   color: rgb(153, 152, 152);
 }
 
-.list-input input::placeholder {
+.todo-input::placeholder {
   color: rgb(171, 171, 171);
+}
+
+.todo-input-edit {
+  width: 98%;
+  font-style: normal;
+  padding: 0;
+  color: #000;
+  cursor: default;
+}
+
+.todo-input-edit:focus {
+  cursor: text;
 }
 
 #todo-add-btn {
@@ -78,6 +91,7 @@ section {
   align-items: center;
   gap: 15px;
   color: #000;
+  width: 95%;
 }
 
 .lists li div .check {
@@ -91,6 +105,11 @@ section {
 
 .list-drag-btn {
   cursor: move;
+  color: rgb(159, 159, 159);
+}
+
+.list-delete-btn {
+  cursor: pointer;
   color: rgb(159, 159, 159);
 }
 
