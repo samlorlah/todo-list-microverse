@@ -1,6 +1,9 @@
+import updateStatus from './status.js';
+
 const listContainer = document.querySelector('.lists');
 const todoInput = document.querySelector('.todo-input');
 const addTodoBtn = document.querySelector('#todo-add-btn');
+const clearAllCompletedBtn = document.querySelector('.clear-all-completed p');
 
 export default class Todos {
   constructor(tasks = []) {
@@ -10,15 +13,35 @@ export default class Todos {
   displayList(task) {
     const list = document.createElement('li');
     list.setAttribute('dataindex', task.index);
-    list.innerHTML = `
-        <div id="task-${task.index}">
-            <input type="checkbox" name="" class="task-complete check ${task.completed ? 'hide' : ''}">
-            <i class="fa fa-check list-drag-btn check check-icon ${!task.completed ? 'hide' : ''}"></i>
-            <input type="text" class="todo-input-edit ${task.completed ? 'completed' : ''}" value="${task.description}" />
-        </div>
-      `;
+
+    const taskContainer = document.createElement('div');
+    taskContainer.id = `task-${task.index}`;
+    const check = document.createElement('input');
+    check.setAttribute('type', 'checkbox');
+    check.className = task.completed ? 'task-complete check hide' : 'task-complete check';
+    taskContainer.appendChild(check);
+
+    const checkIconContainer = document.createElement('span');
+    checkIconContainer.className = !task.completed ? 'hide' : '';
+    const checkIcon = document.createElement('i');
+    checkIcon.className = 'fa fa-check list-drag-btn check check-icon';
+    checkIconContainer.appendChild(checkIcon);
+    taskContainer.appendChild(checkIconContainer);
+
+    const text = document.createElement('input');
+    text.setAttribute('type', 'text');
+    text.className = task.completed ? 'todo-input-edit completed' : 'todo-input-edit';
+    text.value = task.description;
+    taskContainer.appendChild(text);
+
+    list.appendChild(taskContainer);
+
     const dragBtn = document.createElement('span');
-    dragBtn.className = 'fa fa-ellipsis-vertical list-drag-btn';
+    dragBtn.className = 'list-drag-btn';
+    const dragIcon = document.createElement('i');
+    dragIcon.className = 'fa fa-ellipsis-vertical';
+    dragBtn.appendChild(dragIcon);
+
     const trashBtn = document.createElement('span');
     const trashIcon = document.createElement('i');
     trashBtn.className = 'list-delete-btn hide';
@@ -27,18 +50,21 @@ export default class Todos {
     list.appendChild(dragBtn);
     list.appendChild(trashBtn);
     listContainer.appendChild(list);
-    list.onclick = () => {
+    document.onclick = () => {
       const todoInputs = document.querySelectorAll('.todo-input-edit');
       todoInputs.forEach((input) => {
         const parent = input.parentNode.parentNode;
         const drag = parent.children[1];
         const trash = parent.children[2];
+        const completedStatus = input.classList.contains('completed');
         if (input === document.activeElement) {
           drag.classList.add('hide');
           trash.classList.remove('hide');
+          input.style.textDecoration = 'none';
         } else {
           drag.classList.remove('hide');
           trash.classList.add('hide');
+          if (completedStatus) input.style.textDecoration = 'line-through';
         }
       });
     };
@@ -54,6 +80,14 @@ export default class Todos {
 
     trashBtn.addEventListener('click', () => {
       this.removeTask(task);
+    });
+
+    check.addEventListener('change', () => {
+      this.handleCompleted(task);
+    });
+
+    checkIconContainer.addEventListener('click', () => {
+      this.handleCompleted(task);
     });
   }
 
@@ -97,6 +131,22 @@ export default class Todos {
     localStorage.setItem('todoItems', JSON.stringify(this.tasks));
     this.getTasks();
   }
+
+  handleCompleted(selectedTask) {
+    updateStatus(this.tasks, selectedTask);
+    localStorage.setItem('todoItems', JSON.stringify(this.tasks));
+    this.getTasks();
+  }
+
+  clearAllCompleted() {
+    this.tasks = this.tasks.filter((task) => task.completed === false);
+    this.tasks.map((task, index) => {
+      task.index = index + 1;
+      return task;
+    });
+    localStorage.setItem('todoItems', JSON.stringify(this.tasks));
+    this.getTasks();
+  }
 }
 
 const todos = new Todos();
@@ -122,4 +172,8 @@ todoInput.addEventListener('keypress', (e) => {
     e.preventDefault();
     addTodoBtn.click();
   }
+});
+
+clearAllCompletedBtn.addEventListener('click', () => {
+  todos.clearAllCompleted();
 });
