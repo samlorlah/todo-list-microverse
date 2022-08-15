@@ -9,6 +9,7 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.26.0",
+    "hint": "^7.1.1",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
@@ -17,13 +18,15 @@
     "xml-loader": "^1.2.1"
   },
   "dependencies": {
+    "gh-pages": "^4.0.0",
     "lodash": "^4.17.21"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
     "start": "webpack serve --open",
-    "build": "webpack"
+    "build": "webpack",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -35,5 +38,5 @@
   "bugs": {
     "url": "https://github.com/samlorlah/todo-list-microverse/issues"
   },
-  "homepage": "https://github.com/samlorlah/todo-list-microverse#readme"
+  "homepage": "https://samlorlah.github.io/todo-list-microverse/"
 }
