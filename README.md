@@ -8,7 +8,9 @@
 - Major languages - HTML, CSS and Javascript
 
 
-## Getting Started
+## Live Demo
+
+[Live Demo Link](https://samlorlah.github.io/todo-list-microverse/dist/)
 
 
 
